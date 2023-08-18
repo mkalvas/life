@@ -1,3 +1,3 @@
-export const main = () => {
-  console.log('hello, world');
-};
+import { main } from './src/main.ts';
+
+main();

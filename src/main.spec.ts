@@ -1,6 +1,6 @@
-import { main } from './gol.ts';
+import { main } from './main.ts';
 
-describe('Game of Life', () => {
+describe('Main', () => {
   it('says hello, world', () => {
     const spy = jest.spyOn(console, 'log').mockImplementationOnce(() => {});
     main();

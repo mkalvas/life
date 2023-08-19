@@ -35,7 +35,7 @@ impl State {
     }
 
     fn read_state_file(&mut self) {
-        match fs::read_to_string("../patterns/growth.txt") {
+        match fs::read_to_string("../patterns/max.txt") {
             Err(_) => (),
             Ok(contents) => {
                 let mut set = HashSet::new();

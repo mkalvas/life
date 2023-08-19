@@ -5,6 +5,11 @@ use ratatui::{
     widgets::canvas::{Painter, Shape},
 };
 
+pub enum InitPattern {
+    Pattern(String),
+    Random,
+}
+
 pub struct State {
     pub alive: usize,
     pub generation: usize,
@@ -18,7 +23,7 @@ pub struct State {
 }
 
 impl State {
-    pub fn new() -> Self {
+    pub fn new(pattern: InitPattern) -> Self {
         let mut ret = Self {
             xs: [0, 0],
             ys: [0, 0],
@@ -30,12 +35,17 @@ impl State {
             seen: HashSet::new(),
             points: HashSet::new(),
         };
-        ret.read_state_file();
+
+        match pattern {
+            InitPattern::Random => ret.read_state_file("random".to_string()),
+            InitPattern::Pattern(pattern) => ret.read_state_file(pattern),
+        }
+
         ret
     }
 
-    fn read_state_file(&mut self) {
-        match fs::read_to_string("../patterns/max.txt") {
+    fn read_state_file(&mut self, pattern: String) {
+        match fs::read_to_string(format!("../patterns/{pattern}.txt")) {
             Err(_) => (),
             Ok(contents) => {
                 let mut set = HashSet::new();

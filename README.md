@@ -25,3 +25,4 @@ This project will be polyglottal so each top level folder should be the project 
 - [ ] add non-tui graphics version
   - [ ] tui/graphics cli option
 - [ ] Haskell version
+- [ ] React + WASM rust version

@@ -5,7 +5,7 @@ use crossterm::event::{KeyCode, KeyEvent, KeyModifiers};
 mod state;
 mod tui;
 use ratatui::symbols::Marker;
-pub use state::State;
+pub use state::{InitPattern, State};
 pub use tui::{run, setup_panic_hook};
 
 pub struct App {
@@ -16,10 +16,10 @@ pub struct App {
 }
 
 impl App {
-    pub fn new() -> Self {
+    pub fn new(pattern: InitPattern) -> Self {
         Self {
             paused: true,
-            state: State::new(),
+            state: State::new(pattern),
             tab: MenuItem::Game,
             marker: Marker::Bar,
         }

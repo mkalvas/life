@@ -58,7 +58,14 @@ fn render(terminal: &mut Terminal<CrosstermBackend<io::Stdout>>, app: &App) -> a
         let size = rect.size();
         let chunks = Layout::default()
             .direction(Direction::Vertical)
-            .constraints([Constraint::Length(3), Constraint::Min(2)].as_ref())
+            .constraints(
+                [
+                    Constraint::Length(3),
+                    Constraint::Min(2),
+                    Constraint::Length(3),
+                ]
+                .as_ref(),
+            )
             .split(size);
 
         // Draw screen
@@ -72,6 +79,8 @@ fn render(terminal: &mut Terminal<CrosstermBackend<io::Stdout>>, app: &App) -> a
                 chunks[1],
             ),
         };
+
+        rect.render_widget(crate::ui::stats::render(&app), chunks[2]);
     })?;
     Ok(())
 }

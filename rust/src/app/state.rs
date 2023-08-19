@@ -6,11 +6,15 @@ use ratatui::{
 };
 
 pub struct State {
-    xs: [i64; 2],
-    ys: [i64; 2],
+    pub alive: usize,
+    pub generation: usize,
     pub points: HashSet<(i64, i64)>,
     pub delta: HashSet<(i64, i64)>,
     pub seen: HashSet<(i64, i64)>,
+    stabilized: bool,
+    stable_gens: u8,
+    xs: [i64; 2],
+    ys: [i64; 2],
 }
 
 impl State {
@@ -18,6 +22,10 @@ impl State {
         let mut ret = Self {
             xs: [0, 0],
             ys: [0, 0],
+            stabilized: false,
+            stable_gens: 0,
+            alive: 0,
+            generation: 1,
             delta: HashSet::new(),
             seen: HashSet::new(),
             points: HashSet::new(),
@@ -27,7 +35,7 @@ impl State {
     }
 
     fn read_state_file(&mut self) {
-        match fs::read_to_string("../patterns/random.txt") {
+        match fs::read_to_string("../patterns/growth.txt") {
             Err(_) => (),
             Ok(contents) => {
                 let mut set = HashSet::new();
@@ -57,6 +65,7 @@ impl State {
                             };
 
                             set.insert((px, py));
+                            self.alive += 1;
                         }
                     }
                 }
@@ -66,17 +75,39 @@ impl State {
     }
 
     pub fn step(&mut self) {
-        self.generate_delta();
-        self.apply_delta();
+        if !self.stabilized {
+            self.generate_delta();
+            self.apply_delta();
+            if !self.stabilized {
+                self.generation += 1;
+            }
+        }
     }
 
     fn apply_delta(&mut self) {
+        let prev_alive = self.alive;
         for point in &self.delta {
             if self.points.contains(point) {
                 self.points.remove(point);
+                self.alive -= 1;
             } else {
                 self.points.insert(point.clone());
+                self.alive += 1;
             }
+        }
+
+        // extinction is permanently stable
+        if self.alive == 0 {
+            self.stabilized = true;
+        }
+
+        if self.alive == prev_alive {
+            self.stable_gens += 1;
+            // arbitrary cutoff, could be false too if we have gliders on
+            // collision paths with other living cells or gliders
+            self.stabilized = self.stable_gens > 5;
+        } else {
+            self.stable_gens = 0;
         }
     }
 

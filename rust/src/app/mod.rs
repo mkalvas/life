@@ -12,13 +12,13 @@ pub struct App {
     pub tab: MenuItem,
     pub state: State,
     pub marker: Marker,
-    paused: bool,
+    pub paused: bool,
 }
 
 impl App {
     pub fn new() -> Self {
         Self {
-            paused: false,
+            paused: true,
             state: State::new(),
             tab: MenuItem::Game,
             marker: Marker::Bar,

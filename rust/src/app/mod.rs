@@ -1,10 +1,12 @@
 use crate::ui::menu::MenuItem;
 use anyhow::anyhow;
 use crossterm::event::{KeyCode, KeyEvent, KeyModifiers};
+use ratatui::symbols::Marker;
 
 mod state;
 mod tui;
-use ratatui::symbols::Marker;
+
+pub mod cli;
 pub use state::{InitPattern, State};
 pub use tui::{run, setup_panic_hook};
 
@@ -49,12 +51,12 @@ impl App {
                     };
                 }
             }
-            KeyCode::Left => self.goto(MenuItem::from(usize::from(self.tab) + 3 - 1 % 3)),
+            KeyCode::Left => self.goto(MenuItem::from(usize::from(self.tab) + 2)), // enums auto modulo!
             KeyCode::Right => {
                 if self.tab == MenuItem::Game && self.paused {
                     self.state.step();
                 } else {
-                    self.goto(MenuItem::from(usize::from(self.tab) + 1 % 3))
+                    self.goto(MenuItem::from(usize::from(self.tab) + 1))
                 }
             }
             KeyCode::Enter => match self.tab {

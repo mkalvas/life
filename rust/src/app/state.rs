@@ -101,7 +101,7 @@ impl State {
                 self.points.remove(point);
                 self.alive -= 1;
             } else {
-                self.points.insert(point.clone());
+                self.points.insert(*point);
                 self.alive += 1;
             }
         }
@@ -136,10 +136,8 @@ impl State {
                     let nbrs = self.count_neighbors(pt);
 
                     let on = self.points.contains(pt);
-                    if nbrs == 3 && !on {
-                        self.delta.insert(pt.clone());
-                    } else if on && (nbrs < 2 || nbrs > 3) {
-                        self.delta.insert(pt.clone());
+                    if (!on && nbrs == 3) || (on && !((2..=3).contains(&nbrs))) {
+                        self.delta.insert(*pt);
                     }
                 }
             }

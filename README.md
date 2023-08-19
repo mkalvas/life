@@ -10,6 +10,9 @@ This project will be polyglottal so each top level folder should be the project 
 
 - [ ] better stats (sparkline for pop or something? side panel instead of bottom to keep pane more square)
   - [ ] mem usage?
+- [ ] tests
+  - [x] basic
+  - [ ] detailed
 - [ ] perf
   - [ ] clean app, state, etc. structs
   - [ ] benchmarks
@@ -18,8 +21,8 @@ This project will be polyglottal so each top level folder should be the project 
   - [ ] best practices around sets (clear vs new, contains etc.)
   - [ ] repr pt struct impl eq or lists or something?
 - [ ] CLI
-  - [ ] pattern
-  - [ ] tick rate
+  - [x] pattern
+  - [x] tick rate
   - [ ] zoom level
 - [ ] UI simplify to single side panel?
 - [ ] add non-tui graphics version

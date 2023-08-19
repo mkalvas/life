@@ -18,17 +18,17 @@ pub fn setup_panic_hook() {
     }));
 }
 
-pub fn run(mut app: App) -> anyhow::Result<()> {
+pub fn run(mut app: App, tick_rate: u64) -> anyhow::Result<()> {
     let mut terminal = setup_terminal()?;
 
-    let tick_rate = Duration::from_millis(50);
+    let tick_rate_duration = Duration::from_millis(tick_rate);
     let mut last_tick = Instant::now();
     loop {
-        if render(&mut terminal, &mut app).is_err() {
+        if render(&mut terminal, &app).is_err() {
             break;
         }
 
-        if tick(&mut app, tick_rate, &mut last_tick).is_err() {
+        if tick(&mut app, tick_rate_duration, &mut last_tick).is_err() {
             break;
         }
     }
@@ -80,7 +80,7 @@ fn render(terminal: &mut Terminal<CrosstermBackend<io::Stdout>>, app: &App) -> a
             ),
         };
 
-        rect.render_widget(crate::ui::stats::render(&app), chunks[2]);
+        rect.render_widget(crate::ui::stats::render(app), chunks[2]);
     })?;
     Ok(())
 }

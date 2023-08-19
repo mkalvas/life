@@ -8,7 +8,7 @@ use ratatui::{
     },
 };
 
-pub fn render<'a>(
+pub fn render(
     frame: Rect,
     state: &State,
     marker: Marker,
@@ -26,5 +26,5 @@ pub fn render<'a>(
 fn bounds(span: u16) -> [f64; 2] {
     let half = (span / 2) as f64;
     // let half = (span * 2) as f64;
-    [-half, if span % 2 == 0 { half } else { half + 1 as f64 }]
+    [-half, if span % 2 == 0 { half } else { half + 1_f64 }]
 }

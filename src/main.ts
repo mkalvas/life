@@ -1,3 +1,6 @@
+import { Game } from './game.ts';
+
 export const main = () => {
-  console.log('hello, world');
+  const game = new Game();
+  console.log(`${game}`);
 };

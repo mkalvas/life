@@ -8,10 +8,14 @@ use ratatui::{
     },
 };
 
-pub fn render<'a>(frame: Rect, state: &State) -> Canvas<impl Fn(&mut Context<'_>) + '_> {
+pub fn render<'a>(
+    frame: Rect,
+    state: &State,
+    marker: Marker,
+) -> Canvas<impl Fn(&mut Context<'_>) + '_> {
     Canvas::default()
         .block(Block::default().borders(Borders::ALL).title("Game of Life"))
-        .marker(Marker::Bar)
+        .marker(marker)
         .paint(|ctx| {
             ctx.draw(state);
         })

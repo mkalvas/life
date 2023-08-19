@@ -21,7 +21,7 @@ pub fn setup_panic_hook() {
 pub fn run(mut app: App) -> anyhow::Result<()> {
     let mut terminal = setup_terminal()?;
 
-    let tick_rate = Duration::from_millis(10);
+    let tick_rate = Duration::from_millis(50);
     let mut last_tick = Instant::now();
     loop {
         if render(&mut terminal, &mut app).is_err() {
@@ -67,9 +67,10 @@ fn render(terminal: &mut Terminal<CrosstermBackend<io::Stdout>>, app: &App) -> a
         match app.tab {
             MenuItem::Quit => rect.render_widget(crate::ui::quit::render(), chunks[1]),
             MenuItem::Help => rect.render_widget(crate::ui::help::render(), chunks[1]),
-            MenuItem::Game => {
-                rect.render_widget(crate::ui::game::render(chunks[1], &app.state), chunks[1])
-            }
+            MenuItem::Game => rect.render_widget(
+                crate::ui::game::render(chunks[1], &app.state, app.marker),
+                chunks[1],
+            ),
         };
     })?;
     Ok(())

@@ -2,7 +2,7 @@ import fs from 'fs';
 import { Game } from './game.ts';
 
 export const main = async () => {
-  let init = fs.readFileSync('../start.txt', 'utf8');
+  let init = fs.readFileSync('../patterns/gosper-glider.txt', 'utf8');
   const game = new Game(init);
   while (true) {
     console.clear();

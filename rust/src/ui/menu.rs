@@ -5,7 +5,7 @@ use ratatui::{
     widgets::{Block, Borders, Tabs},
 };
 
-#[derive(Copy, Clone, Debug)]
+#[derive(Copy, Clone, Debug, PartialEq)]
 pub enum MenuItem {
     Quit,
     Help,

@@ -10,6 +10,7 @@ pub fn render<'a>() -> Table<'a> {
         Row::new(vec!["global", "focus help tab", "h, 2"]),
         Row::new(vec!["global", "focus quit tab", "q, 3"]),
         Row::new(vec!["global", "change tab", "left, right"]),
+        Row::new(vec!["game tab", "cycle marker", "m"]),
         Row::new(vec!["game tab (unpaused)", "pause game", "enter"]),
         Row::new(vec!["game tab (paused)", "unpause game", "enter"]),
         Row::new(vec!["game tab (paused)", "step game", "right"]),

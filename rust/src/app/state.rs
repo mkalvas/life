@@ -6,14 +6,139 @@ use ratatui::{
 };
 
 pub struct State {
-    points: HashSet<(i64, i64)>,
+    xs: [i64; 2],
+    ys: [i64; 2],
+    pub points: HashSet<(i64, i64)>,
+    pub delta: HashSet<(i64, i64)>,
+    pub seen: HashSet<(i64, i64)>,
 }
 
 impl State {
     pub fn new() -> Self {
-        Self {
-            points: HashSet::from(read_state_file()),
+        let mut ret = Self {
+            xs: [0, 0],
+            ys: [0, 0],
+            delta: HashSet::new(),
+            seen: HashSet::new(),
+            points: HashSet::new(),
+        };
+        ret.read_state_file();
+        ret
+    }
+
+    fn read_state_file(&mut self) {
+        match fs::read_to_string("../patterns/traffic-stop.txt") {
+            Err(_) => (),
+            Ok(contents) => {
+                let mut set = HashSet::new();
+                let mut half_width: i64 = 0;
+                let half_height: i64 = (contents.lines().count() / 2) as i64;
+
+                for (y, line) in contents.lines().enumerate() {
+                    if half_width == 0 {
+                        half_width = (line.len() / 2) as i64;
+                    }
+
+                    for (x, char) in line.chars().enumerate() {
+                        if char == 'o' {
+                            let px = x as i64 - half_width;
+                            let py = -(y as i64 - half_height);
+
+                            if px < self.xs[0] {
+                                self.xs[0] = px
+                            } else if px > self.xs[1] {
+                                self.xs[1] = px
+                            };
+
+                            if py < self.ys[0] {
+                                self.ys[0] = py
+                            } else if py > self.ys[1] {
+                                self.ys[1] = py
+                            };
+
+                            set.insert((px, py));
+                        }
+                    }
+                }
+                self.points = set;
+            }
         }
+    }
+
+    pub fn step(&mut self) {
+        self.generate_delta();
+        self.apply_delta();
+    }
+
+    fn apply_delta(&mut self) {
+        for point in &self.delta {
+            if self.points.contains(point) {
+                self.points.remove(point);
+            } else {
+                self.points.insert(point.clone());
+            }
+        }
+    }
+
+    // fn generate_delta(&mut self) {
+    //     self.delta = HashSet::new();
+    //     for y in self.ys[0]..self.ys[1] {
+    //         for x in self.xs[0]..self.xs[1] {
+    //             let mut nbrs = 0;
+    //             for dx in -1..1 {
+    //                 for dy in -1..1 {
+    //                     if dx == 0 && dy == 0 {
+    //                         continue;
+    //                     }
+    //                     nbrs += self.points.contains(&(x + dx, y + dy)) as u8
+    //                 }
+    //             }
+
+    //             let on = self.points.contains(&(x, y));
+    //             if !on && nbrs == 3 {
+    //                 self.delta.insert((x, y));
+    //             } else if on && (nbrs < 2 || nbrs > 3) {
+    //                 self.delta.insert((x, y));
+    //             }
+    //         }
+    //     }
+    // }
+
+    fn generate_delta(&mut self) {
+        self.delta = HashSet::new();
+        self.seen = HashSet::new();
+        // only check on points and neighbors of on points
+        for (x, y) in &self.points {
+            for dx in -1..=1 {
+                for dy in -1..=1 {
+                    let pt = &(x + dx, y + dy);
+                    if self.seen.contains(pt) {
+                        continue;
+                    }
+
+                    let nbrs = self.count_neighbors(pt);
+
+                    let on = self.points.contains(pt);
+                    if nbrs == 3 && !on {
+                        self.delta.insert(pt.clone());
+                    } else if on && (nbrs < 2 || nbrs > 3) {
+                        self.delta.insert(pt.clone());
+                    }
+                }
+            }
+        }
+    }
+
+    fn count_neighbors(&self, (px, py): &(i64, i64)) -> u8 {
+        let mut nbrs = 0;
+        for dx in -1..=1 {
+            for dy in -1..=1 {
+                if !(dx == 0 && dy == 0) {
+                    nbrs += self.points.contains(&(px + dx, py + dy)) as u8;
+                }
+            }
+        }
+        nbrs
     }
 }
 
@@ -23,30 +148,6 @@ impl Shape for State {
             if let Some((x, y)) = painter.get_point(*x as f64, *y as f64) {
                 painter.paint(x, y, Color::LightGreen);
             }
-        }
-    }
-}
-
-fn read_state_file() -> HashSet<(i64, i64)> {
-    match fs::read_to_string("../start.txt") {
-        Err(_) => HashSet::new(),
-        Ok(contents) => {
-            let mut set = HashSet::new();
-            let mut half_width: i64 = 0;
-            let half_height: i64 = (contents.lines().count() / 2) as i64;
-
-            for (y, line) in contents.lines().enumerate() {
-                if half_width == 0 {
-                    half_width = (line.len() / 2) as i64;
-                }
-
-                for (x, char) in line.chars().enumerate() {
-                    if char == 'o' {
-                        set.insert((x as i64 - half_width, y as i64 - half_height));
-                    }
-                }
-            }
-            set
         }
     }
 }

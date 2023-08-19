@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "test": "jest --watch",
-    "start": "ts-node gol.ts"
+    "start": "ts-node gol.ts",
+    "generate:noise": "ts-node gen.ts"
   },
   "dependencies": {
     "ts-node": "^10.9.1"

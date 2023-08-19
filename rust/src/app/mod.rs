@@ -1,6 +1,6 @@
 use crate::ui::menu::MenuItem;
 use anyhow::anyhow;
-use crossterm::event::{KeyCode, KeyEvent};
+use crossterm::event::{KeyCode, KeyEvent, KeyModifiers};
 
 mod state;
 mod tui;
@@ -62,6 +62,11 @@ impl App {
                 MenuItem::Game => self.paused = !self.paused,
                 MenuItem::Quit => return Err(anyhow!("quitting")),
             },
+            KeyCode::Char('c') => {
+                if key.modifiers == KeyModifiers::CONTROL {
+                    return Err(anyhow!("quitting"));
+                }
+            }
             _ => {} // all other keys unbound
         };
         Ok(())

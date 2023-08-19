@@ -44,13 +44,12 @@ export class Game {
       for (const dc of [-1, 0, 1]) {
         const r = y + dr;
         const c = x + dc;
-        const isOrigin = dr === 0 && dc === 0;
         if (
           r >= 0 &&
           c >= 0 &&
           r < this.state.length &&
           c < (this.state?.[y]?.length ?? -Infinity) &&
-          !isOrigin &&
+          !(dr === 0 && dc === 0) &&
           this.state[r]?.[c]?.on
         ) {
           nbrs += 1;

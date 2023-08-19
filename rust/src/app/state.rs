@@ -27,7 +27,7 @@ impl State {
     }
 
     fn read_state_file(&mut self) {
-        match fs::read_to_string("../patterns/traffic-stop.txt") {
+        match fs::read_to_string("../patterns/random.txt") {
             Err(_) => (),
             Ok(contents) => {
                 let mut set = HashSet::new();
@@ -40,7 +40,7 @@ impl State {
                     }
 
                     for (x, char) in line.chars().enumerate() {
-                        if char == 'o' {
+                        if char == 'O' {
                             let px = x as i64 - half_width;
                             let py = -(y as i64 - half_height);
 
@@ -79,30 +79,6 @@ impl State {
             }
         }
     }
-
-    // fn generate_delta(&mut self) {
-    //     self.delta = HashSet::new();
-    //     for y in self.ys[0]..self.ys[1] {
-    //         for x in self.xs[0]..self.xs[1] {
-    //             let mut nbrs = 0;
-    //             for dx in -1..1 {
-    //                 for dy in -1..1 {
-    //                     if dx == 0 && dy == 0 {
-    //                         continue;
-    //                     }
-    //                     nbrs += self.points.contains(&(x + dx, y + dy)) as u8
-    //                 }
-    //             }
-
-    //             let on = self.points.contains(&(x, y));
-    //             if !on && nbrs == 3 {
-    //                 self.delta.insert((x, y));
-    //             } else if on && (nbrs < 2 || nbrs > 3) {
-    //                 self.delta.insert((x, y));
-    //             }
-    //         }
-    //     }
-    // }
 
     fn generate_delta(&mut self) {
         self.delta = HashSet::new();

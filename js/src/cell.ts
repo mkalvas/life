@@ -1,4 +1,4 @@
-export const FILLED = 'o';
+export const FILLED = 'O';
 export const EMPTY = ' ';
 
 export class Cell {

@@ -13,13 +13,17 @@ describe('Cell', () => {
 
   it('can make the cell dead', () => {
     const cell = new Cell(true);
-    cell.toggle();
+    cell.to(false);
+    expect(cell.on).toBe(true);
+    cell.flush();
     expect(cell.on).toBe(false);
   });
 
   it('can make the cell live', () => {
     const cell = new Cell();
-    cell.toggle();
+    cell.to(true);
+    expect(cell.on).toBe(false);
+    cell.flush();
     expect(cell.on).toBe(true);
   });
 

@@ -9,7 +9,7 @@ pub fn render<'a>() -> Table<'a> {
         Row::new(vec!["global", "focus game tab", "g, 1"]),
         Row::new(vec!["global", "focus help tab", "h, 2"]),
         Row::new(vec!["global", "focus quit tab", "q, 3"]),
-        Row::new(vec!["global", "Change tab", "left, right"]),
+        Row::new(vec!["global", "change tab", "left, right"]),
         Row::new(vec!["game tab (unpaused)", "pause game", "enter"]),
         Row::new(vec!["game tab (paused)", "unpause game", "enter"]),
         Row::new(vec!["game tab (paused)", "step game", "right"]),
@@ -26,8 +26,8 @@ pub fn render<'a>() -> Table<'a> {
     .column_spacing(2)
     .widths(&[
         Constraint::Min(19),
-        Constraint::Min(20),
         Constraint::Min(15),
+        Constraint::Min(11),
     ])
     .block(
         Block::default()

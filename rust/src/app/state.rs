@@ -1,40 +1,52 @@
-use anyhow::anyhow;
-use crossterm::event::{KeyCode, KeyEvent};
+use std::{collections::HashSet, fs};
 
-use crate::ui::menu::MenuItem;
+use ratatui::{
+    style::Color,
+    widgets::canvas::{Painter, Shape},
+};
 
-pub struct App {
-    pub tab: MenuItem,
-    paused: bool,
+pub struct State {
+    points: HashSet<(i64, i64)>,
 }
 
-impl App {
+impl State {
     pub fn new() -> Self {
         Self {
-            tab: MenuItem::Game,
-            paused: false,
+            points: HashSet::from(read_state_file()),
         }
     }
+}
 
-    pub fn on_tick(&mut self) {}
+impl Shape for State {
+    fn draw(&self, painter: &mut Painter) {
+        for (x, y) in &self.points {
+            if let Some((x, y)) = painter.get_point(*x as f64, *y as f64) {
+                painter.paint(x, y, Color::LightGreen);
+            }
+        }
+    }
+}
 
-    pub fn handle_input(&mut self, key: KeyEvent) -> anyhow::Result<()> {
-        match key.code {
-            KeyCode::Char('g') | KeyCode::Char('1') => self.tab = MenuItem::Game,
-            KeyCode::Char('h') | KeyCode::Char('2') => self.tab = MenuItem::Help,
-            KeyCode::Char('q') | KeyCode::Char('3') => match self.tab {
-                MenuItem::Quit => return Err(anyhow!("quitting")),
-                _ => self.tab = MenuItem::Quit,
-            },
-            KeyCode::Left => self.tab = MenuItem::from(usize::from(self.tab) + 3 - 1 % 3),
-            KeyCode::Right => self.tab = MenuItem::from(usize::from(self.tab) + 1 % 3),
-            KeyCode::Enter => match self.tab {
-                MenuItem::Help => self.tab = MenuItem::Game,
-                MenuItem::Game => self.paused = !self.paused,
-                MenuItem::Quit => return Err(anyhow!("quitting")),
-            },
-            _ => {} // all other keys unbound
-        };
-        Ok(())
+fn read_state_file() -> HashSet<(i64, i64)> {
+    match fs::read_to_string("../start.txt") {
+        Err(_) => HashSet::new(),
+        Ok(contents) => {
+            let mut set = HashSet::new();
+            let mut half_width: i64 = 0;
+            let half_height: i64 = (contents.lines().count() / 2) as i64;
+
+            for (y, line) in contents.lines().enumerate() {
+                if half_width == 0 {
+                    half_width = (line.len() / 2) as i64;
+                }
+
+                for (x, char) in line.chars().enumerate() {
+                    if char == 'o' {
+                        set.insert((x as i64 - half_width, y as i64 - half_height));
+                    }
+                }
+            }
+            set
+        }
     }
 }

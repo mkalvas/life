@@ -1,4 +1,4 @@
-use crate::app::state::App;
+use crate::app::App;
 use ratatui::{
     style::{Color, Modifier, Style},
     text::{Line, Span},

@@ -1,4 +1,4 @@
-use crate::{app::state::App, ui::menu::MenuItem};
+use crate::{app::App, ui::menu::MenuItem};
 use crossterm::{
     event::{self, DisableMouseCapture, EnableMouseCapture, Event},
     execute,
@@ -53,15 +53,6 @@ fn restore_terminal() -> anyhow::Result<()> {
     Ok(())
 }
 
-// fn lines(strings: &Vec<String>) -> Vec<Line> {
-//     let strings = strings.clone();
-//     let mut lines: Vec<Line> = Vec::new();
-//     for s in strings.into_iter() {
-//         lines.push(Line::from(s))
-//     }
-//     lines
-// }
-
 fn render(terminal: &mut Terminal<CrosstermBackend<io::Stdout>>, app: &App) -> anyhow::Result<()> {
     terminal.draw(|rect| {
         let size = rect.size();
@@ -76,7 +67,9 @@ fn render(terminal: &mut Terminal<CrosstermBackend<io::Stdout>>, app: &App) -> a
         match app.tab {
             MenuItem::Quit => rect.render_widget(crate::ui::quit::render(), chunks[1]),
             MenuItem::Help => rect.render_widget(crate::ui::help::render(), chunks[1]),
-            MenuItem::Game => rect.render_widget(crate::ui::quit::render(), chunks[1]),
+            MenuItem::Game => {
+                rect.render_widget(crate::ui::game::render(chunks[1], &app.state), chunks[1])
+            }
         };
     })?;
     Ok(())

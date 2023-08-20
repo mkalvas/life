@@ -1,6 +1,6 @@
 #[cfg(test)]
 mod tests {
-    use crate::app::{InitPattern, State};
+    use gol::app::{InitPattern, State};
     use std::collections::HashSet;
 
     #[test]

@@ -85,12 +85,14 @@ impl State {
     }
 
     pub fn step(&mut self) {
+        if self.stabilized {
+            return;
+        }
+
+        self.generate_delta();
+        self.apply_delta();
         if !self.stabilized {
-            self.generate_delta();
-            self.apply_delta();
-            if !self.stabilized {
-                self.generation += 1;
-            }
+            self.generation += 1;
         }
     }
 

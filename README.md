@@ -8,24 +8,55 @@ This project will be polyglottal so each top level folder should be the project 
 
 ## To Do
 
-- [ ] better stats (sparkline for pop or something? side panel instead of bottom to keep pane more square)
-  - [ ] mem usage?
-- [ ] tests
+### Rust
+
+- [x] game
+  - [ ] reset game keybind
+- [x] tests
   - [x] basic
-  - [ ] detailed
-- [ ] perf
-  - [ ] clean app, state, etc. structs
-  - [ ] benchmarks
-  - [ ] unroll delta loops
-  - [ ] remove branches where possible
-  - [ ] best practices around sets (clear vs new, contains etc.)
-  - [ ] repr pt struct impl eq or lists or something?
-- [ ] CLI
+  - [ ] detailed?
+- [x] cli
   - [x] pattern
   - [x] tick rate
-  - [ ] zoom level
-- [ ] UI simplify to single side panel?
-- [ ] add non-tui graphics version
-  - [ ] tui/graphics cli option
-- [ ] Haskell version
-- [ ] React + WASM rust version
+  - [x] zoom level
+- [ ] ui
+  - [x] tui
+  - [ ] simplify to single side panel layout?
+  - [ ] sparkline for population
+  - [ ] add non-tui graphics version
+    - [ ] tui/graphics cli option
+- [ ] perf
+  - [ ] clean app
+  - [ ] clean tui
+  - [x] clean state
+  - [x] benchmarks
+  - [x] unroll delta loops
+  - [x] remove branches where possible
+  - [x] best practices around sets (clear vs new, contains etc.)
+  - [ ] repr pt struct impl eq or lists or something?
+  - [ ] mem profiling (see <https://github.com/koute/bytehound>)
+
+### JS / TS
+
+- [x] game
+  - [x] oop style
+  - [ ] unbounded grid
+- [x] tests
+- [ ] cli
+  - [ ] pattern
+- [ ] ui
+  - [ ] nicer output?
+
+### Haskell
+
+- [ ] game
+- [ ] tests
+- [ ] cli
+- [ ] ui
+
+### React + WASM
+
+- [ ] game
+- [ ] tests
+- [ ] cli
+- [ ] ui

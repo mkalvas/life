@@ -10,6 +10,8 @@ use std::{
     time::{Duration, Instant},
 };
 
+use super::cli::TuiOptions;
+
 pub fn setup_panic_hook() {
     let original_hook = std::panic::take_hook();
     panic::set_hook(Box::new(move |panic| {
@@ -18,15 +20,15 @@ pub fn setup_panic_hook() {
     }));
 }
 
-pub fn run(mut app: App, tick_rate: Duration) -> anyhow::Result<()> {
+pub fn run(mut app: App, opts: TuiOptions) -> anyhow::Result<()> {
     let mut terminal = setup_terminal()?;
     let mut last_tick = Instant::now();
     loop {
-        if render(&mut terminal, &app).is_err() {
+        if render(&mut terminal, &app, opts.zoom).is_err() {
             break;
         }
 
-        if tick(&mut app, tick_rate, &mut last_tick).is_err() {
+        if tick(&mut app, opts.tick_rate, &mut last_tick).is_err() {
             break;
         }
     }
@@ -51,7 +53,11 @@ fn restore_terminal() -> anyhow::Result<()> {
     Ok(())
 }
 
-fn render(terminal: &mut Terminal<CrosstermBackend<io::Stdout>>, app: &App) -> anyhow::Result<()> {
+fn render(
+    terminal: &mut Terminal<CrosstermBackend<io::Stdout>>,
+    app: &App,
+    zoom: u8,
+) -> anyhow::Result<()> {
     terminal.draw(|rect| {
         let size = rect.size();
         let chunks = Layout::default()
@@ -73,7 +79,7 @@ fn render(terminal: &mut Terminal<CrosstermBackend<io::Stdout>>, app: &App) -> a
             MenuItem::Quit => rect.render_widget(crate::ui::quit::render(), chunks[1]),
             MenuItem::Help => rect.render_widget(crate::ui::help::render(), chunks[1]),
             MenuItem::Game => rect.render_widget(
-                crate::ui::game::render(chunks[1], &app.state, app.marker),
+                crate::ui::game::render(chunks[1], &app.state, app.marker, zoom),
                 chunks[1],
             ),
         };

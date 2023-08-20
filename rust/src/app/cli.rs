@@ -1,3 +1,5 @@
+use std::time::Duration;
+
 use clap::{command, Parser};
 
 use super::InitPattern;
@@ -15,7 +17,7 @@ pub struct Args {
     pub tick: Option<i64>,
 }
 
-pub fn parse() -> (u64, InitPattern) {
+pub fn parse() -> (Duration, InitPattern) {
     let args = Args::parse();
 
     let tick: u64 = match args.tick {
@@ -24,10 +26,12 @@ pub fn parse() -> (u64, InitPattern) {
         Some(rate) => rate as u64,
     };
 
+    let tick_rate = Duration::from_millis(tick);
+
     let pattern = match args.pattern {
         None => InitPattern::Random,
         Some(pattern) => InitPattern::Pattern(pattern),
     };
 
-    (tick, pattern)
+    (tick_rate, pattern)
 }

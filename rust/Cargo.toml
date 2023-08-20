@@ -10,6 +10,9 @@ bench = false
 name = "gol"
 bench = false
 
+[profile.release]
+opt-level = 3
+
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]

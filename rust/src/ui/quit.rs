@@ -2,12 +2,11 @@ use ratatui::{
     layout::Alignment,
     style::{Color, Style},
     text::{Line, Span},
-    widgets::{Block, BorderType, Borders, Paragraph},
+    widgets::{Block, BorderType, Borders, Padding, Paragraph},
 };
 
 pub fn render<'a>() -> Paragraph<'a> {
     Paragraph::new(vec![
-        Line::from(vec![Span::raw("")]),
         Line::from(vec![Span::styled(
             "Do you really want to quit?",
             Style::default().fg(Color::Red),
@@ -18,9 +17,15 @@ pub fn render<'a>() -> Paragraph<'a> {
     .alignment(Alignment::Center)
     .block(
         Block::default()
-            .borders(Borders::ALL)
-            .style(Style::default().fg(Color::White))
             .title("Quit")
-            .border_type(BorderType::Plain),
+            .borders(Borders::ALL)
+            .border_type(BorderType::Plain)
+            .style(Style::default().fg(Color::White))
+            .padding(Padding {
+                top: 2,
+                bottom: 2,
+                left: 1,
+                right: 1,
+            }),
     )
 }

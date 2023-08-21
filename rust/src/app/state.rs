@@ -1,4 +1,4 @@
-use crate::app::pattern::InitPattern;
+use crate::app::Pattern;
 use ratatui::{
     style::Color,
     widgets::canvas::{Painter, Shape},
@@ -17,7 +17,7 @@ pub struct State {
 }
 
 impl State {
-    pub fn new(pattern: &InitPattern) -> Self {
+    pub fn new(pattern: &Pattern) -> Self {
         let mut ret = Self {
             alive: 0,
             generation: 1,
@@ -29,7 +29,7 @@ impl State {
         ret
     }
 
-    pub fn init_from_pattern(&mut self, pattern: &InitPattern) {
+    pub fn init_from_pattern(&mut self, pattern: &Pattern) {
         let contents = pattern.grid();
         let half_height = (contents.lines().count() / 2) as i64;
         let half_width: i64 = match contents.lines().take(1).next() {

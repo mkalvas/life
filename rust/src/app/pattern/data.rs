@@ -1,91 +1,6 @@
-use clap::ValueEnum;
 use rand::Rng;
 
-#[derive(ValueEnum, Debug, Clone, Copy)]
-pub enum InitPattern {
-    Random,
-    SimpleExtinct,
-    SimpleStable,
-    GosperGlider,
-    RPentomino,
-    Max,
-    PufferShip,
-    Spider,
-    Hotcrystal0,
-    P76PiPentominoHassler,
-}
-
-impl InitPattern {
-    pub fn as_str(&self) -> &'static str {
-        match self {
-            InitPattern::Random => "Random",
-            InitPattern::SimpleExtinct => "Simple Extinct",
-            InitPattern::SimpleStable => "Simple Stable",
-            InitPattern::GosperGlider => "Gosper Glider",
-            InitPattern::RPentomino => "R-pentomino",
-            InitPattern::Max => "Max",
-            InitPattern::PufferShip => "Puffer Ship",
-            InitPattern::Spider => "Spider",
-            InitPattern::Hotcrystal0 => "Hotcrystal0",
-            InitPattern::P76PiPentominoHassler => "p76 pi-heptomino hassler",
-        }
-    }
-
-    pub fn grid(&self) -> String {
-        match self {
-            InitPattern::Random => random(),
-            InitPattern::SimpleExtinct => SIMPLE_EXTINCT.to_string(),
-            InitPattern::SimpleStable => SIMPLE_STABLE.to_string(),
-            InitPattern::GosperGlider => GOSPER_GLIDER.to_string(),
-            InitPattern::RPentomino => R_PENTOMINO.to_string(),
-            InitPattern::Max => MAX.to_string(),
-            InitPattern::PufferShip => PUFFER_SHIP.to_string(),
-            InitPattern::Spider => SPIDER.to_string(),
-            InitPattern::Hotcrystal0 => HOTCRYSTAL_0.to_string(),
-            InitPattern::P76PiPentominoHassler => P76_PI_PENTOMINO_HASSLER.to_string(),
-        }
-    }
-
-    pub fn all() -> Vec<(InitPattern, &'static str)> {
-        vec![
-            (InitPattern::Random, InitPattern::Random.as_str()),
-            (
-                InitPattern::SimpleExtinct,
-                InitPattern::SimpleExtinct.as_str(),
-            ),
-            (
-                InitPattern::SimpleStable,
-                InitPattern::SimpleStable.as_str(),
-            ),
-            (
-                InitPattern::GosperGlider,
-                InitPattern::GosperGlider.as_str(),
-            ),
-            (InitPattern::RPentomino, InitPattern::RPentomino.as_str()),
-            (InitPattern::Max, InitPattern::Max.as_str()),
-            (InitPattern::PufferShip, InitPattern::PufferShip.as_str()),
-            (InitPattern::Hotcrystal0, InitPattern::Hotcrystal0.as_str()),
-            (
-                InitPattern::P76PiPentominoHassler,
-                InitPattern::P76PiPentominoHassler.as_str(),
-            ),
-        ]
-    }
-}
-
-impl TryFrom<String> for InitPattern {
-    type Error = &'static str;
-    fn try_from(value: String) -> Result<InitPattern, Self::Error> {
-        for (p, s) in InitPattern::all().into_iter() {
-            if s == value {
-                return Ok(p);
-            }
-        }
-        Err("unknown pattern")
-    }
-}
-
-fn random() -> String {
+pub fn random() -> String {
     let mut rng = rand::thread_rng();
     let mut out = "".to_string();
     for _ in 0..20 {
@@ -97,16 +12,16 @@ fn random() -> String {
     out.trim_end().to_string()
 }
 
-const SIMPLE_EXTINCT: &str = "\
+pub const SIMPLE_EXTINCT: &str = "\
 .O.
 O.O
 ...";
 
-const SIMPLE_STABLE: &str = "\
+pub const SIMPLE_STABLE: &str = "\
 OO
 OO";
 
-const GOSPER_GLIDER: &str = "\
+pub const GOSPER_GLIDER: &str = "\
 ........................................................
 ........................................................
 ........................................................
@@ -128,12 +43,12 @@ const GOSPER_GLIDER: &str = "\
 ........................................................
 ........................................................";
 
-const R_PENTOMINO: &str = "\
+pub const R_PENTOMINO: &str = "\
 .OO
 OO.
 .O.";
 
-const MAX: &str = "\
+pub const MAX: &str = "\
 O.O.O.OO...O.O..OOO...OO.
 OOO.O...O...O...OO...OOO.
 ...OOOO..O.OO...O.O.O.O..
@@ -160,7 +75,7 @@ OOO.OO.O..OO...O...OO.OO.
 .OOO.O.OO..O..O.O.....O.O
 OOO...OOO..OO.....OO..O..";
 
-const PUFFER_SHIP: &str = "\
+pub const PUFFER_SHIP: &str = "\
 ...................O...........O...................
 ..................O.O.........O.O..................
 .................OO.OO.......OO.OO.................
@@ -205,7 +120,7 @@ OO.O...........................................O.OO
 ..OOO.........................................OOO..
 ..OOO.........................................OOO..";
 
-const SPIDER: &str = "\
+pub const SPIDER: &str = "\
 .........O.......O.........
 ...OO.O.O.OO...OO.O.O.OO...
 OOO.O.OOO.........OOO.O.OOO
@@ -215,7 +130,7 @@ O...O.O.....O.O.....O.O...O
 .OO.OO...............OO.OO.
 .....O...............O.....";
 
-const HOTCRYSTAL_0: &str = "\
+pub const HOTCRYSTAL_0: &str = "\
 ...........OO....................O.........
 ............O..................OOO...OO....
 ............O.O...............O........O.OO
@@ -254,7 +169,7 @@ O.O..O......O..............................
 .OOOO....OOO...............................
 ..OO.....O.................................";
 
-const P76_PI_PENTOMINO_HASSLER: &str = "\
+pub const P76_PI_PENTOMINO_HASSLER: &str = "\
 .OO....................
 O.O....................
 O.O.OO.................

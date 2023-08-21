@@ -1,4 +1,4 @@
-use crate::app::pattern::InitPattern;
+use crate::app::Pattern;
 use clap::{command, Parser, ValueEnum};
 use std::time::Duration;
 
@@ -24,8 +24,8 @@ impl From<ZoomLevel> for u8 {
 #[command(author, version, about, long_about = None)]
 struct Args {
     /// Premade pattern to run
-    #[arg(short, long, value_enum, default_value_t = InitPattern::Random)]
-    pattern: InitPattern,
+    #[arg(short, long, value_enum, default_value_t = Pattern::Random)]
+    pattern: Pattern,
 
     /// Tick rate to run game at
     #[arg(short, long, default_value_t = 50)]
@@ -41,7 +41,7 @@ pub struct TuiOptions {
     pub zoom: u8,
 }
 
-pub fn parse() -> (InitPattern, TuiOptions) {
+pub fn parse() -> (Pattern, TuiOptions) {
     let args = Args::parse();
     let zoom: u8 = args.zoom.into();
     let tick: u64 = match args.tick {

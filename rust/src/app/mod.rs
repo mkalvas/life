@@ -10,7 +10,7 @@ mod state;
 mod tui;
 
 pub mod cli;
-pub use pattern::InitPattern;
+pub use pattern::{Pattern, PatternList};
 pub use state::State;
 pub use tui::{run, setup_panic_hook};
 
@@ -20,25 +20,29 @@ pub struct App {
     pub marker: Marker,
     pub paused: bool,
     pub alive_history: FixedVec<u64>,
-    pattern: InitPattern,
+    pub patterns: PatternList,
 }
 
 impl App {
-    pub fn new(pattern: InitPattern) -> Self {
+    pub fn new(pattern: &Pattern) -> Self {
         Self {
             paused: true,
             state: State::new(&pattern),
             tab: MenuItem::Game,
             marker: Marker::Bar,
             alive_history: FixedVec::new(500),
-            pattern,
+            patterns: PatternList::new(&pattern),
         }
+    }
+
+    pub fn step(&mut self) {
+        self.state.step();
+        self.alive_history.prepend(self.state.alive as u64);
     }
 
     pub fn on_tick(&mut self) {
         if !self.paused {
-            self.state.step();
-            self.alive_history.prepend(self.state.alive as u64);
+            self.step();
         }
     }
 
@@ -58,8 +62,24 @@ impl App {
                     };
                 }
             }
+            KeyCode::Right => {
+                if self.tab == MenuItem::Game && self.paused {
+                    self.step();
+                }
+            }
             KeyCode::Char('r') => {
-                self.state = State::new(&self.pattern);
+                self.paused = true;
+                self.state = State::new(&self.patterns.selected());
+            }
+            KeyCode::Up => {
+                if self.tab == MenuItem::Select {
+                    self.patterns.prev()
+                }
+            }
+            KeyCode::Down => {
+                if self.tab == MenuItem::Select {
+                    self.patterns.next()
+                }
             }
             KeyCode::Esc => match self.tab {
                 MenuItem::Quit => self.goto(MenuItem::Game),
@@ -68,8 +88,11 @@ impl App {
             },
             KeyCode::Enter => match self.tab {
                 MenuItem::Game => self.paused = !self.paused,
-                MenuItem::Select => todo!(),
                 MenuItem::Quit => return Err(anyhow!("quitting")),
+                MenuItem::Select => {
+                    self.state = State::new(&self.patterns.selected());
+                    self.tab = MenuItem::Game // don't unpause right away
+                }
             },
             KeyCode::Char('c') => {
                 if key.modifiers == KeyModifiers::CONTROL {

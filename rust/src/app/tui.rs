@@ -7,7 +7,7 @@ use crossterm::{
     execute,
     terminal::{disable_raw_mode, enable_raw_mode, EnterAlternateScreen, LeaveAlternateScreen},
 };
-use ratatui::{prelude::*, Terminal};
+use ratatui::{prelude::*, widgets::ListItem, Terminal};
 use std::{
     io, panic,
     time::{Duration, Instant},
@@ -27,7 +27,7 @@ pub fn run(mut app: App, opts: TuiOptions) -> anyhow::Result<()> {
     let mut terminal = setup_terminal()?;
     let mut last_tick = Instant::now();
     loop {
-        if render(&mut terminal, &app, opts.zoom).is_err() {
+        if render(&mut terminal, &mut app, opts.zoom).is_err() {
             break;
         }
 
@@ -58,7 +58,7 @@ fn restore_terminal() -> anyhow::Result<()> {
 
 fn render(
     terminal: &mut Terminal<CrosstermBackend<io::Stdout>>,
-    app: &App,
+    app: &mut App,
     zoom: u8,
 ) -> anyhow::Result<()> {
     terminal.draw(|rect| {
@@ -83,20 +83,32 @@ fn render(
         rect.render_widget(crate::ui::spark::render(app), stats_layout[1]);
 
         match app.tab {
-            MenuItem::Select => {
-                let popup_area = centered_rect(60, 40, size);
-                rect.render_widget(crate::ui::game::game_block(), sections[1]);
-                rect.render_widget(crate::ui::select::render(), popup_area);
+            MenuItem::Game => {
+                rect.render_widget(
+                    crate::ui::game::render(sections[1], &app.state, app.marker, zoom),
+                    sections[1],
+                );
             }
             MenuItem::Quit => {
                 let popup_area = centered_rect(60, 40, size);
                 rect.render_widget(crate::ui::game::game_block(), sections[1]);
                 rect.render_widget(crate::ui::quit::render(), popup_area);
             }
-            MenuItem::Game => {
-                rect.render_widget(
-                    crate::ui::game::render(sections[1], &app.state, app.marker, zoom),
-                    sections[1],
+            MenuItem::Select => {
+                let popup_area = centered_rect(60, 40, size);
+                rect.render_widget(crate::ui::game::game_block(), sections[1]);
+
+                let items: Vec<ListItem> = app
+                    .patterns
+                    .get_items()
+                    .iter()
+                    .map(|i| ListItem::new(i.as_str()))
+                    .collect();
+
+                rect.render_stateful_widget(
+                    crate::ui::select::render(items),
+                    popup_area,
+                    app.patterns.get_state(),
                 );
             }
         };

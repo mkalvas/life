@@ -1,9 +1,9 @@
 use criterion::{
     criterion_group, criterion_main, measurement::WallTime, BenchmarkGroup, Criterion,
 };
-use gol::app::{InitPattern, State};
+use gol::app::{Pattern, State};
 
-fn step_n(group: &mut BenchmarkGroup<WallTime>, pattern: InitPattern, n: usize) {
+fn step_n(group: &mut BenchmarkGroup<WallTime>, pattern: Pattern, n: usize) {
     let base_state = State::new(&pattern);
     group.bench_function(format!("{}-{n}", pattern.as_str()).as_str(), |b| {
         b.iter(|| {
@@ -18,10 +18,10 @@ fn step_n(group: &mut BenchmarkGroup<WallTime>, pattern: InitPattern, n: usize) 
 fn bench(c: &mut Criterion) {
     let mut group = c.benchmark_group("step");
     group.sampling_mode(criterion::SamplingMode::Auto);
-    step_n(&mut group, InitPattern::SimpleExtinct, 10);
+    step_n(&mut group, Pattern::SimpleExtinct, 10);
     group.sampling_mode(criterion::SamplingMode::Flat);
-    step_n(&mut group, InitPattern::Max, 10);
-    step_n(&mut group, InitPattern::Max, 100);
+    step_n(&mut group, Pattern::Max, 10);
+    step_n(&mut group, Pattern::Max, 100);
     group.finish();
 }
 

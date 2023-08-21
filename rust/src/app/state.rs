@@ -22,7 +22,7 @@ pub struct State {
 }
 
 impl State {
-    pub fn new(pattern: InitPattern) -> Self {
+    pub fn new(pattern: &InitPattern) -> Self {
         let mut ret = Self {
             alive: 0,
             generation: 1,
@@ -32,14 +32,14 @@ impl State {
         };
 
         match pattern {
-            InitPattern::Random => ret.read_state_file("random".to_string()),
-            InitPattern::Pattern(pattern) => ret.read_state_file(pattern),
+            InitPattern::Random => ret.read_state_file(&"random".to_string()),
+            InitPattern::Pattern(p) => ret.read_state_file(p),
         }
 
         ret
     }
 
-    fn read_state_file(&mut self, pattern: String) {
+    pub fn read_state_file(&mut self, pattern: &String) {
         match fs::read_to_string(format!("../patterns/{pattern}.txt")) {
             Err(_) => (),
             Ok(contents) => {

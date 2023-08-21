@@ -11,7 +11,7 @@ This project will be polyglottal so each top level folder should be the project 
 ### Rust
 
 - [x] game
-  - [ ] reset game keybind
+  - [x] reset game keybind
   - [ ] pre-made pattern selector
 - [x] tests
   - [x] basic

@@ -18,16 +18,18 @@ pub struct App {
     pub marker: Marker,
     pub paused: bool,
     pub alive_history: FixedVec<u64>,
+    pattern: InitPattern,
 }
 
 impl App {
     pub fn new(pattern: InitPattern) -> Self {
         Self {
             paused: true,
-            state: State::new(pattern),
+            state: State::new(&pattern),
             tab: MenuItem::Game,
             marker: Marker::Bar,
             alive_history: FixedVec::new(500),
+            pattern,
         }
     }
 
@@ -53,6 +55,9 @@ impl App {
                         Marker::Dot => Marker::Bar,
                     };
                 }
+            }
+            KeyCode::Char('r') => {
+                self.state = State::new(&self.pattern);
             }
             KeyCode::Esc => self.goto(MenuItem::Select),
             KeyCode::Enter => match self.tab {

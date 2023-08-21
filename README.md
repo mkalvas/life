@@ -12,6 +12,7 @@ This project will be polyglottal so each top level folder should be the project 
 
 - [x] game
   - [ ] reset game keybind
+  - [ ] pre-made pattern selector
 - [x] tests
   - [x] basic
   - [ ] detailed?
@@ -19,21 +20,20 @@ This project will be polyglottal so each top level folder should be the project 
   - [x] pattern
   - [x] tick rate
   - [x] zoom level
-- [ ] ui
+- [x] ui
   - [x] tui
-  - [ ] simplify to single side panel layout?
-  - [ ] sparkline for population
+  - [x] simplify to single side panel layout? Kinda
+  - [x] sparkline for population (cool slice-deque!)
   - [ ] add non-tui graphics version
     - [ ] tui/graphics cli option
-- [ ] perf
-  - [ ] clean app
-  - [ ] clean tui
+- [x] perf
+  - [x] clean app
+  - [x] clean tui
   - [x] clean state
   - [x] benchmarks
   - [x] unroll delta loops
   - [x] remove branches where possible
   - [x] best practices around sets (clear vs new, contains etc.)
-  - [ ] repr pt struct impl eq or lists or something?
   - [ ] mem profiling (see <https://github.com/koute/bytehound>)
 
 ### JS / TS

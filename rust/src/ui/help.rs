@@ -1,40 +1,54 @@
+use crate::{app::App, ui::menu::MenuItem};
 use ratatui::{
     layout::Constraint,
-    style::{Color, Modifier, Style},
-    widgets::{Block, BorderType, Borders, Row, Table},
+    style::{Color, Style},
+    widgets::{Block, BorderType, Borders, Padding, Row, Table},
 };
 
-pub fn render<'a>() -> Table<'a> {
-    Table::new(vec![
-        Row::new(vec!["global", "focus game tab", "g, 1"]),
-        Row::new(vec!["global", "focus help tab", "h, 2"]),
-        Row::new(vec!["global", "focus quit tab", "q, 3"]),
-        Row::new(vec!["global", "change tab", "left, right"]),
-        Row::new(vec!["game tab", "cycle marker", "m"]),
-        Row::new(vec!["game tab (unpaused)", "pause game", "enter"]),
-        Row::new(vec!["game tab (paused)", "unpause game", "enter"]),
-        Row::new(vec!["game tab (paused)", "step game", "right"]),
-        Row::new(vec!["help tab", "focus game tab", "enter"]),
-        Row::new(vec!["quit tab", "exit app", "enter, q"]),
-    ])
-    .header(
-        Row::new(vec!["Context", "Action", "Keys"]).style(
-            Style::default()
-                .fg(Color::LightGreen)
-                .add_modifier(Modifier::BOLD),
-        ),
-    )
-    .column_spacing(2)
-    .widths(&[
-        Constraint::Min(19),
-        Constraint::Min(15),
-        Constraint::Min(11),
-    ])
-    .block(
-        Block::default()
-            .borders(Borders::ALL)
-            .style(Style::default().fg(Color::White))
-            .title("Keybinds")
-            .border_type(BorderType::Plain),
-    )
+pub fn render<'a>(app: &App) -> Table<'a> {
+    let enter = match app.tab {
+        MenuItem::Quit => "confirm quit",
+        MenuItem::Select => "select pattern",
+        MenuItem::Game => {
+            if app.paused {
+                "unpause"
+            } else {
+                "pause"
+            }
+        }
+    };
+
+    let mut keybinds = vec![
+        Row::new(vec!["␛", "pattern selector"]),
+        Row::new(vec!["↵", enter]),
+        Row::new(vec!["r", "restart"]),
+        Row::new(vec!["d", "dot style"]),
+        Row::new(vec!["q", "quit"]),
+    ];
+
+    if app.paused && app.tab == MenuItem::Game {
+        keybinds.push(Row::new(vec!["→", "step once"]))
+    }
+
+    if app.tab == MenuItem::Select {
+        keybinds.push(Row::new(vec!["ꜛ", "change selection"]));
+        keybinds.push(Row::new(vec!["ꜜ", "change selection"]));
+    }
+
+    Table::new(keybinds)
+        .column_spacing(2)
+        .widths(&[Constraint::Min(3), Constraint::Min(16)])
+        .block(
+            Block::default()
+                .borders(Borders::ALL)
+                .style(Style::default().fg(Color::White))
+                .title("Keybinds")
+                .border_type(BorderType::Plain)
+                .padding(Padding {
+                    left: 1,
+                    right: 1,
+                    top: 0,
+                    bottom: 0,
+                }),
+        )
 }

@@ -60,31 +60,35 @@ fn render(
 ) -> anyhow::Result<()> {
     terminal.draw(|rect| {
         let size = rect.size();
-        let chunks = Layout::default()
+        let sections = Layout::default()
             .direction(Direction::Vertical)
-            .constraints(
-                [
-                    Constraint::Length(3),
-                    Constraint::Min(2),
-                    Constraint::Length(3),
-                ]
-                .as_ref(),
-            )
+            .constraints([Constraint::Length(10), Constraint::Min(0)])
             .split(size);
 
-        // Draw screen
-        rect.render_widget(crate::ui::menu::render(app), chunks[0]);
+        let infobar = Layout::default()
+            .direction(Direction::Horizontal)
+            .constraints([Constraint::Length(25), Constraint::Min(0)])
+            .split(sections[0]);
+
+        let stats_layout = Layout::default()
+            .direction(Direction::Vertical)
+            .constraints([Constraint::Length(4), Constraint::Length(6)])
+            .split(infobar[1]);
+
+        rect.render_widget(crate::ui::help::render(app), infobar[0]);
+        rect.render_widget(crate::ui::stats::render(app), stats_layout[0]);
+        rect.render_widget(crate::ui::spark::render(app), stats_layout[1]);
 
         match app.tab {
-            MenuItem::Quit => rect.render_widget(crate::ui::quit::render(), chunks[1]),
-            MenuItem::Help => rect.render_widget(crate::ui::help::render(), chunks[1]),
+            MenuItem::Quit => rect.render_widget(crate::ui::quit::render(), sections[1]),
+            MenuItem::Select => todo!(),
             MenuItem::Game => rect.render_widget(
-                crate::ui::game::render(chunks[1], &app.state, app.marker, zoom),
-                chunks[1],
+                crate::ui::game::render(sections[1], &app.state, app.marker, zoom),
+                sections[1],
             ),
         };
 
-        rect.render_widget(crate::ui::stats::render(app), chunks[2]);
+        // rect.render_widget(crate::ui::stats::render(app), chunks[2]);
     })?;
     Ok(())
 }

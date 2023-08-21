@@ -1,6 +1,7 @@
 use crate::app::State;
 use ratatui::{
     prelude::Rect,
+    style::{Color, Style},
     symbols::Marker,
     widgets::{
         canvas::{Canvas, Context},
@@ -15,13 +16,18 @@ pub fn render(
     zoom: u8,
 ) -> Canvas<impl Fn(&mut Context<'_>) + '_> {
     Canvas::default()
-        .block(Block::default().borders(Borders::ALL).title("Game of Life"))
+        .x_bounds(bounds(frame.width, zoom))
+        .y_bounds(bounds(frame.height, zoom))
         .marker(marker)
         .paint(|ctx| {
             ctx.draw(state);
         })
-        .x_bounds(bounds(frame.width, zoom))
-        .y_bounds(bounds(frame.height, zoom))
+        .block(
+            Block::default()
+                .borders(Borders::ALL)
+                .title("Game of Life")
+                .style(Style::default().fg(Color::White)),
+        )
 }
 
 fn bounds(span: u16, zoom: u8) -> [f64; 2] {

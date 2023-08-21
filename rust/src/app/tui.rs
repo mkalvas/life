@@ -1,4 +1,7 @@
-use crate::{app::App, ui::menu::MenuItem};
+use crate::{
+    app::App,
+    ui::{menu::MenuItem, select::centered_rect},
+};
 use crossterm::{
     event::{self, DisableMouseCapture, EnableMouseCapture, Event},
     execute,
@@ -80,12 +83,22 @@ fn render(
         rect.render_widget(crate::ui::spark::render(app), stats_layout[1]);
 
         match app.tab {
-            MenuItem::Quit => rect.render_widget(crate::ui::quit::render(), sections[1]),
-            MenuItem::Select => todo!(),
-            MenuItem::Game => rect.render_widget(
-                crate::ui::game::render(sections[1], &app.state, app.marker, zoom),
-                sections[1],
-            ),
+            MenuItem::Select => {
+                let popup_area = centered_rect(60, 40, size);
+                rect.render_widget(crate::ui::game::game_block(), sections[1]);
+                rect.render_widget(crate::ui::select::render(), popup_area);
+            }
+            MenuItem::Quit => {
+                let popup_area = centered_rect(60, 40, size);
+                rect.render_widget(crate::ui::game::game_block(), sections[1]);
+                rect.render_widget(crate::ui::quit::render(), popup_area);
+            }
+            MenuItem::Game => {
+                rect.render_widget(
+                    crate::ui::game::render(sections[1], &app.state, app.marker, zoom),
+                    sections[1],
+                );
+            }
         };
 
         // rect.render_widget(crate::ui::stats::render(app), chunks[2]);

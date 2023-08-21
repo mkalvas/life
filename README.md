@@ -12,7 +12,7 @@ This project will be polyglottal so each top level folder should be the project 
 
 - [x] game
   - [x] reset game keybind
-  - [ ] pre-made pattern selector
+  - [ ] pre-made pattern selector (use [popup](https://github.com/ratatui-org/ratatui/blob/main/examples/popup.rs)?)
 - [x] tests
   - [x] basic
   - [ ] detailed?

@@ -5,11 +5,13 @@ use ratatui::symbols::Marker;
 use slice_deque::SliceDeque;
 use std::ops::Deref;
 
+mod pattern;
 mod state;
 mod tui;
 
 pub mod cli;
-pub use state::{InitPattern, State};
+pub use pattern::InitPattern;
+pub use state::State;
 pub use tui::{run, setup_panic_hook};
 
 pub struct App {
@@ -59,7 +61,11 @@ impl App {
             KeyCode::Char('r') => {
                 self.state = State::new(&self.pattern);
             }
-            KeyCode::Esc => self.goto(MenuItem::Select),
+            KeyCode::Esc => match self.tab {
+                MenuItem::Quit => self.goto(MenuItem::Game),
+                MenuItem::Select => self.goto(MenuItem::Game),
+                MenuItem::Game => self.goto(MenuItem::Select),
+            },
             KeyCode::Enter => match self.tab {
                 MenuItem::Game => self.paused = !self.paused,
                 MenuItem::Select => todo!(),

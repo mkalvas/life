@@ -1,6 +1,6 @@
 #[derive(Copy, Clone, Debug, PartialEq)]
 pub enum MenuItem {
-    Quit,
     Select,
+    Quit,
     Game,
 }

@@ -5,8 +5,7 @@ mod tests {
 
     #[test]
     fn it_steps_through_the_simple_extinct_state() {
-        let pattern = InitPattern::Pattern("simple-extinct".to_string());
-        let mut state = State::new(pattern);
+        let mut state = State::new(&InitPattern::SimpleExtinct);
         assert_eq!(state.alive, 3);
         assert_eq!(state.points(), &HashSet::from([(0, 1), (-1, 0), (1, 0)]));
         state.step();
@@ -20,8 +19,7 @@ mod tests {
     #[test]
     fn it_steps_through_the_simple_stable_state() {
         let stable = &HashSet::from([(0, 0), (0, 1), (-1, 0), (-1, 1)]);
-        let pattern = InitPattern::Pattern("simple-stable".to_string());
-        let mut state = State::new(pattern);
+        let mut state = State::new(&InitPattern::SimpleStable);
         assert_eq!(state.alive, 4);
         assert_eq!(state.points(), stable);
         state.step();

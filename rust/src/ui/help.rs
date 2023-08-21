@@ -6,20 +6,20 @@ use ratatui::{
 };
 
 pub fn render<'a>(app: &App) -> Table<'a> {
-    let enter = match app.tab {
-        MenuItem::Quit => "confirm quit",
-        MenuItem::Select => "select pattern",
+    let (enter, escape) = match app.tab {
+        MenuItem::Select => ("select pattern", "resume game"),
+        MenuItem::Quit => ("confirm quit", "resume game"),
         MenuItem::Game => {
             if app.paused {
-                "unpause"
+                ("unpause", "pattern selector")
             } else {
-                "pause"
+                ("pause", "pattern selector")
             }
         }
     };
 
     let mut keybinds = vec![
-        Row::new(vec!["␛", "pattern selector"]),
+        Row::new(vec!["␛", escape]),
         Row::new(vec!["↵", enter]),
         Row::new(vec!["r", "restart"]),
         Row::new(vec!["d", "dot style"]),

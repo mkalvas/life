@@ -1,10 +1,9 @@
+use crate::app::App;
 use ratatui::{
     style::{Color, Style},
     text::{Line, Span},
     widgets::{Block, BorderType, Borders, Padding, Paragraph},
 };
-
-use crate::app::App;
 
 pub fn render<'a>(app: &App) -> Paragraph<'a> {
     let (status, color) = if app.paused {

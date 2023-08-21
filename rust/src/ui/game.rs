@@ -22,16 +22,18 @@ pub fn render(
         .paint(|ctx| {
             ctx.draw(state);
         })
-        .block(
-            Block::default()
-                .borders(Borders::ALL)
-                .title("Game of Life")
-                .style(Style::default().fg(Color::White)),
-        )
+        .block(game_block())
 }
 
 fn bounds(span: u16, zoom: u8) -> [f64; 2] {
     let half = (span * (zoom as u16) / 2) as f64;
     // let half = (span * 2) as f64;
     [-half, if span % 2 == 0 { half } else { half + 1_f64 }]
+}
+
+pub fn game_block<'a>() -> Block<'a> {
+    Block::default()
+        .borders(Borders::ALL)
+        .title("Game of Life")
+        .style(Style::default().fg(Color::White))
 }

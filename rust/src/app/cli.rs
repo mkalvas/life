@@ -1,8 +1,6 @@
-use std::time::Duration;
-
+use crate::app::pattern::InitPattern;
 use clap::{command, Parser, ValueEnum};
-
-use super::InitPattern;
+use std::time::Duration;
 
 #[derive(ValueEnum, Debug, Clone, Copy)]
 enum ZoomLevel {
@@ -26,12 +24,12 @@ impl From<ZoomLevel> for u8 {
 #[command(author, version, about, long_about = None)]
 struct Args {
     /// Premade pattern to run
-    #[arg(short, long)]
-    pattern: Option<String>,
+    #[arg(short, long, value_enum, default_value_t = InitPattern::Random)]
+    pattern: InitPattern,
 
     /// Tick rate to run game at
-    #[arg(short, long)]
-    tick: Option<i64>,
+    #[arg(short, long, default_value_t = 50)]
+    tick: i64,
 
     /// Zoom level
     #[arg(short, long, value_enum, default_value_t = ZoomLevel::Default)]
@@ -45,20 +43,12 @@ pub struct TuiOptions {
 
 pub fn parse() -> (InitPattern, TuiOptions) {
     let args = Args::parse();
-
     let zoom: u8 = args.zoom.into();
-
-    let pattern = match args.pattern {
-        None => InitPattern::Random,
-        Some(pattern) => InitPattern::Pattern(pattern),
-    };
-
     let tick: u64 = match args.tick {
-        None => 50,
-        Some(rate) if rate < 0 => 50,
-        Some(rate) => rate as u64,
+        rate if rate < 0 => 50,
+        rate => rate as u64,
     };
 
     let tick_rate = Duration::from_millis(tick);
-    (pattern, TuiOptions { tick_rate, zoom })
+    (args.pattern, TuiOptions { tick_rate, zoom })
 }

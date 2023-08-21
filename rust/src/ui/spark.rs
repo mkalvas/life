@@ -1,11 +1,10 @@
+use crate::app::App;
 use ratatui::{
     style::{Color, Style},
     widgets::{Block, BorderType, Borders, Padding, RenderDirection, Sparkline},
 };
 
-use crate::app::App;
-
-pub fn render<'a>(app: &'a App) -> Sparkline<'a> {
+pub fn render(app: &App) -> Sparkline<'_> {
     Sparkline::default()
         .data(&app.alive_history)
         .direction(RenderDirection::LeftToRight)

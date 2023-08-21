@@ -1,16 +1,11 @@
-use std::{collections::HashSet, fs};
-
+use crate::app::pattern::InitPattern;
 use ratatui::{
     style::Color,
     widgets::canvas::{Painter, Shape},
 };
+use std::collections::HashSet;
 
 type PointSet = HashSet<(i64, i64)>;
-
-pub enum InitPattern {
-    Pattern(String),
-    Random,
-}
 
 #[derive(Clone)]
 pub struct State {
@@ -30,34 +25,25 @@ impl State {
             removals: HashSet::with_capacity(200),
             additions: HashSet::with_capacity(200),
         };
-
-        match pattern {
-            InitPattern::Random => ret.read_state_file(&"random".to_string()),
-            InitPattern::Pattern(p) => ret.read_state_file(p),
-        }
-
+        ret.init_from_pattern(pattern);
         ret
     }
 
-    pub fn read_state_file(&mut self, pattern: &String) {
-        match fs::read_to_string(format!("../patterns/{pattern}.txt")) {
-            Err(_) => (),
-            Ok(contents) => {
-                let half_height = (contents.lines().count() / 2) as i64;
-                let half_width: i64 = match contents.lines().take(1).next() {
-                    Some(line) => (line.len() / 2) as i64,
-                    None => 0,
-                };
+    pub fn init_from_pattern(&mut self, pattern: &InitPattern) {
+        let contents = pattern.grid();
+        let half_height = (contents.lines().count() / 2) as i64;
+        let half_width: i64 = match contents.lines().take(1).next() {
+            Some(line) => (line.len() / 2) as i64,
+            None => 0,
+        };
 
-                for (y, line) in contents.lines().enumerate() {
-                    for (x, char) in line.chars().enumerate() {
-                        if char == 'O' {
-                            let px = x as i64 - half_width;
-                            let py = -(y as i64 - half_height);
-                            self.points.insert((px, py));
-                            self.alive += 1;
-                        }
-                    }
+        for (y, line) in contents.lines().enumerate() {
+            for (x, char) in line.chars().enumerate() {
+                if char == 'O' {
+                    let px = x as i64 - half_width;
+                    let py = -(y as i64 - half_height);
+                    self.points.insert((px, py));
+                    self.alive += 1;
                 }
             }
         }

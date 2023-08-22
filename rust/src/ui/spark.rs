@@ -7,7 +7,7 @@ use ratatui::{
 pub fn render(app: &App) -> Sparkline<'_> {
     Sparkline::default()
         .data(&app.alive_history)
-        .direction(RenderDirection::LeftToRight)
+        .direction(RenderDirection::RightToLeft)
         .style(Style::default().fg(Color::LightGreen))
         .block(
             Block::default()

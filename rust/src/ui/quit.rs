@@ -22,8 +22,8 @@ pub fn render<'a>() -> Paragraph<'a> {
             .border_type(BorderType::Plain)
             .style(Style::default().fg(Color::White))
             .padding(Padding {
-                top: 2,
-                bottom: 2,
+                top: 1,
+                bottom: 1,
                 left: 1,
                 right: 1,
             }),

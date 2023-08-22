@@ -11,30 +11,15 @@ This project will be polyglottal so each top level folder should be the project 
 ### Rust
 
 - [x] game
-  - [x] reset game keybind
-  - [x] pre-made pattern selector (use [popup](https://github.com/ratatui-org/ratatui/blob/main/examples/popup.rs)?)
+  - [ ] drawing mode
 - [x] tests
-  - [x] basic
-  - [ ] detailed?
-- [x] cli
-  - [x] pattern
-  - [x] tick rate
-  - [x] zoom level
-- [x] ui
-  - [x] tui
-  - [x] simplify to single side panel layout? Kinda
-  - [x] sparkline for population (cool slice-deque!)
-  - [ ] add non-tui graphics version
-    - [ ] tui/graphics cli option
 - [x] perf
-  - [x] clean app
-  - [x] clean tui
-  - [x] clean state
-  - [x] benchmarks
-  - [x] unroll delta loops
-  - [x] remove branches where possible
-  - [x] best practices around sets (clear vs new, contains etc.)
-  - [ ] mem profiling (see <https://github.com/koute/bytehound>)
+- [x] cli
+  - [ ] run for x generations
+  - [ ] inspect/export state
+- [x] ui
+  - [ ] handle smaller sizes more intelligently? probably don't care
+  - [ ] add non-tui graphics version
 
 ### JS / TS
 

@@ -28,7 +28,7 @@ pub fn centered_rect(percent_x: u16, percent_y: u16, r: Rect) -> Rect {
         .constraints(
             [
                 Constraint::Percentage((100 - percent_y) / 2),
-                Constraint::Percentage(percent_y),
+                Constraint::Min(7),
                 Constraint::Percentage((100 - percent_y) / 2),
             ]
             .as_ref(),
@@ -40,7 +40,7 @@ pub fn centered_rect(percent_x: u16, percent_y: u16, r: Rect) -> Rect {
         .constraints(
             [
                 Constraint::Percentage((100 - percent_x) / 2),
-                Constraint::Percentage(percent_x),
+                Constraint::Min(31),
                 Constraint::Percentage((100 - percent_x) / 2),
             ]
             .as_ref(),

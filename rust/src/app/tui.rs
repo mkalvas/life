@@ -65,7 +65,7 @@ fn render(
         let size = rect.size();
         let sections = Layout::default()
             .direction(Direction::Vertical)
-            .constraints([Constraint::Length(10), Constraint::Min(0)])
+            .constraints([Constraint::Length(9), Constraint::Min(0)])
             .split(size);
 
         let infobar = Layout::default()
@@ -90,12 +90,12 @@ fn render(
                 );
             }
             MenuItem::Quit => {
-                let popup_area = centered_rect(60, 40, size);
+                let popup_area = centered_rect(30, 40, sections[1]);
                 rect.render_widget(crate::ui::game::game_block(), sections[1]);
                 rect.render_widget(crate::ui::quit::render(), popup_area);
             }
             MenuItem::Select => {
-                let popup_area = centered_rect(60, 40, size);
+                let popup_area = centered_rect(30, 40, sections[1]);
                 rect.render_widget(crate::ui::game::game_block(), sections[1]);
 
                 let items: Vec<ListItem> = app

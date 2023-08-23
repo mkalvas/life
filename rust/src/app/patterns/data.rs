@@ -7,7 +7,7 @@ pub fn random() -> String {
         for _ in 0..40 {
             out.push_str(if rng.gen_range(0..=1) == 1 { "O" } else { "." })
         }
-        out.push_str("\n")
+        out.push('\n')
     }
     out.trim_end().to_string()
 }

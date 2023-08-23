@@ -14,11 +14,12 @@ This project will be polyglottal so each top level folder should be the project 
   - [ ] drawing mode
 - [x] tests
 - [x] perf
+  - [ ] Vec vs hashset? linear search might be faster for small sizes
 - [x] cli
   - [ ] run for x generations
   - [ ] inspect/export state
 - [x] ui
-  - [ ] handle smaller sizes more intelligently? probably don't care
+  - [ ] scroll window (±(x|y) to all points?)
   - [ ] add non-tui graphics version
 
 ### JS / TS

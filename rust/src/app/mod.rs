@@ -5,12 +5,12 @@ use ratatui::symbols::Marker;
 use slice_deque::SliceDeque;
 use std::ops::Deref;
 
-mod pattern;
+mod patterns;
 mod state;
 mod tui;
 
 pub mod cli;
-pub use pattern::{Pattern, PatternList};
+pub use patterns::{Pattern, PatternList};
 pub use state::State;
 pub use tui::{run, setup_panic_hook};
 
@@ -27,11 +27,11 @@ impl App {
     pub fn new(pattern: &Pattern) -> Self {
         Self {
             paused: true,
-            state: State::new(&pattern),
+            state: State::new(pattern),
             tab: MenuItem::Game,
             marker: Marker::Bar,
             alive_history: FixedVec::new(500),
-            patterns: PatternList::new(&pattern),
+            patterns: PatternList::new(pattern),
         }
     }
 

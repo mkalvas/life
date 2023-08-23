@@ -21,13 +21,6 @@ impl PatternList {
         Self { items, state }
     }
 
-    pub fn default() -> Self {
-        Self {
-            items: Pattern::all(),
-            state: ListState::default(),
-        }
-    }
-
     pub fn get_items(&self) -> &Vec<Pattern> {
         &self.items
     }

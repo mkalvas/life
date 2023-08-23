@@ -88,7 +88,7 @@ impl State {
                     let on = self.points.contains(pt);
                     if !on && nbrs == 3 {
                         self.additions.insert(*pt);
-                    } else if on && (nbrs < 2 || 3 < nbrs) {
+                    } else if on && !((2..=3).contains(&nbrs)) {
                         self.removals.insert(*pt);
                     }
                 }
@@ -99,12 +99,12 @@ impl State {
     // unrolled nested for loops for 3x3 square centered on cell (px, py)
     fn count_neighbors(&self, (px, py): &(i64, i64)) -> u8 {
         self.points.contains(&(px + -1, py + -1)) as u8
-            + self.points.contains(&(px + -1, py + 0)) as u8
+            + self.points.contains(&(px + -1, *py)) as u8
             + self.points.contains(&(px + -1, py + 1)) as u8
-            + self.points.contains(&(px + 0, py + -1)) as u8
-            + self.points.contains(&(px + 0, py + 1)) as u8
+            + self.points.contains(&(*px, py + -1)) as u8
+            + self.points.contains(&(*px, py + 1)) as u8
             + self.points.contains(&(px + 1, py + -1)) as u8
-            + self.points.contains(&(px + 1, py + 0)) as u8
+            + self.points.contains(&(px + 1, *py)) as u8
             + self.points.contains(&(px + 1, py + 1)) as u8
     }
 }

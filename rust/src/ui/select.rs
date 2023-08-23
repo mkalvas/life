@@ -4,7 +4,7 @@ use ratatui::{
     widgets::{Block, BorderType, Borders, List, ListItem},
 };
 
-pub fn render<'a>(items: Vec<ListItem<'a>>) -> List<'a> {
+pub fn render(items: Vec<ListItem>) -> List {
     List::new(items)
         .highlight_style(
             Style::default()

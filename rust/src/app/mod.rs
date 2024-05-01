@@ -71,12 +71,12 @@ impl App {
                 self.paused = true;
                 self.state = State::new(&self.patterns.selected());
             }
-            KeyCode::Up => {
+            KeyCode::Up | KeyCode::Char('k') => {
                 if self.tab == MenuItem::Select {
                     self.patterns.prev()
                 }
             }
-            KeyCode::Down => {
+            KeyCode::Down | KeyCode::Char('j') => {
                 if self.tab == MenuItem::Select {
                     self.patterns.next()
                 }

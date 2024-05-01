@@ -34,6 +34,6 @@ fn bounds(span: u16, zoom: u8) -> [f64; 2] {
 pub fn game_block<'a>() -> Block<'a> {
     Block::default()
         .borders(Borders::ALL)
-        .title("Game of Life")
+        .title(" Game of Life ")
         .style(Style::default().fg(Color::White))
 }

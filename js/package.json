@@ -6,11 +6,11 @@
   "type": "module",
   "scripts": {
     "test": "jest --watch",
-    "start": "ts-node gol.ts",
-    "generate:noise": "ts-node gen.ts"
+    "start": "node --loader ts-node/esm gol.ts",
+    "generate:noise": "node --loader ts-node/esm gen.ts"
   },
   "dependencies": {
-    "ts-node": "^10.9.1"
+    "ts-node": "^10.9.2"
   },
   "devDependencies": {
     "@types/jest": "^29.5.3",

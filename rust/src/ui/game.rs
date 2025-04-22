@@ -27,8 +27,7 @@ pub fn render(
 
 fn bounds(span: u16, zoom: u8) -> [f64; 2] {
     let half = (span * (zoom as u16) / 2) as f64;
-    // let half = (span * 2) as f64;
-    [-half, if span % 2 == 0 { half } else { half + 1_f64 }]
+    [-half, half + (span % 2) as f64]
 }
 
 pub fn game_block<'a>() -> Block<'a> {
